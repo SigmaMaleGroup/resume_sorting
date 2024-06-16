@@ -1,15 +1,17 @@
 from flask import Flask, request, jsonify
 import psycopg2
 import joblib
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 
 conn = psycopg2.connect(
-    dbname="default_db",
-    user="gen_user",
-    password="T~h%5Ck%25-hQ(s%7D2Y",
-    host="82.97.248.36",
-    port="5432"
+    dbname=os.getenv("DB_NAME"),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    host=os.getenv("DB_HOST"),
+    port=os.getenv("DB_PORT")
 )
 
 model_paths = {
