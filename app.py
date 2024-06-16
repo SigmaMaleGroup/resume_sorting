@@ -13,7 +13,8 @@ conn = psycopg2.connect(
 )
 
 model_paths = {
-    'software_engineer': 'models/se_model.pkl'
+    'software_engineer': 'models/se_model.pkl',
+    'analyst': 'models/an_model.pkl'
 }
 
 models = {key: joblib.load(path) for key, path in model_paths.items()}
