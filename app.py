@@ -4,6 +4,8 @@ import joblib
 from dotenv import load_dotenv
 import os
 
+load_dotenv()
+
 app = Flask(__name__)
 
 conn = psycopg2.connect(
@@ -26,18 +28,18 @@ def get_top_resumes():
     data = request.json
     vacancy_type = data['vacancy_type']
     resume_ids = data['resume_ids']
-    top_x = data['top_x']
+    top_x = 3
 
     with conn.cursor() as cursor:
         cursor.execute("SELECT id, job_name, skills FROM resume WHERE id = ANY(%s)", (resume_ids,))
         resumes = cursor.fetchall()
 
-    model = models.get(vacancy_type)
+    # model = models.get(vacancy_type)
 
     resume_features = [{'id': resume[0], 'job_name': resume[1], 'skills': resume[2]} for resume in resumes]
 
     # resume_scores = [(resume['id'], model.predict([resume['skills']])[0]) for resume in resume_features]
-    resume_scores = [(resume['id'], 50) for resume in resume_features]
+    resume_scores = [(resume['id'], 10*idx) for idx, resume in enumerate(resume_features)]
 
     sorted_resumes = sorted(resume_scores, key=lambda x: x[1], reverse=True)
 
